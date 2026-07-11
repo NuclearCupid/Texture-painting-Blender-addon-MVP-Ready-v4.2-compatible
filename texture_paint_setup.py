@@ -27,14 +27,14 @@ class OBJECT_OT_PrepareTexturePaint(bpy.types.Operator):
     resolution_x: IntProperty(
         name="Resolution X",
         default=1024,
-        min=256,
+        min=32,
         max=8192,
         description="Width resolution of the new texture image"
     )
     resolution_y: IntProperty(
         name="Resolution Y",
         default=1024,
-        min=256,
+        min=32,
         max=8192,
         description="Height resolution of the new texture image"
     )
@@ -129,9 +129,9 @@ class OBJECT_OT_PrepareTexturePaint(bpy.types.Operator):
             image = bpy.data.images.new(
                 name=self.texture_name,
                 width=self.resolution_x,
-                height=self.resolution_y,
-                color=self.base_color
+                height=self.resolution_y
             )
+            image.generated_color = self.base_color
             if image is None:
                 self.report({'ERROR'}, f"Failed to create image texture '{self.texture_name}'.")
                 return {'CANCELLED'}
@@ -250,8 +250,8 @@ def register():
     bpy.utils.register_class(VIEW3D_PT_TexturePaintSetup)
     bpy.types.Scene.texture_paint_setup_texture_name = StringProperty(default="Generated_Texture")
     bpy.types.Scene.texture_paint_setup_material_name = StringProperty(default="Generated_Material")
-    bpy.types.Scene.texture_paint_setup_resolution_x = IntProperty(default=1024, min=256, max=8192)
-    bpy.types.Scene.texture_paint_setup_resolution_y = IntProperty(default=1024, min=256, max=8192)
+    bpy.types.Scene.texture_paint_setup_resolution_x = IntProperty(default=1024, min=32, max=8192)
+    bpy.types.Scene.texture_paint_setup_resolution_y = IntProperty(default=1024, min=32, max=8192)
     bpy.types.Scene.texture_paint_setup_base_color = FloatVectorProperty(subtype='COLOR', default=(1.0, 1.0, 1.0, 1.0), size=4, min=0.0, max=1.0)
     bpy.types.Scene.texture_paint_setup_uv_unwrap_method = EnumProperty(items=[('SMART', "Smart UV Project", "Automatically unwrap the mesh"), ('LIGHTMAP', "Lightmap Pack", "Create UVs optimized for lightmaps"), ('CYLINDER', "Cylinder Unwrap", "Unwrap the mesh as if it were a cylinder")], default='SMART')
     bpy.types.Scene.texture_paint_setup_brush_name = StringProperty(default="Paint")
